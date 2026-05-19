@@ -1,5 +1,13 @@
 # Virtual environment files
 /.venv/
+/.vscode/
 
 # Env file
 .env
+
+# Pycache files
+**/__pycache__/
+
+# Testing
+/testing/
+

@@ -1,0 +1,1 @@
+TODO: Different modes, mode 1: scrape everything in links.csv, mode 2: scrape only specific target companies, or industries
