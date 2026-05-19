@@ -27,36 +27,46 @@ class WorkdayScraper(BaseScraper):
             )
         )
     
-    def wait_for_page_ready(self):
+    def wait_for_valid_job_section(self):
 
-        WebDriverWait(self.driver, 30).until(
-            lambda d: d.execute_script(
-                "return document.readyState"
-            ) == "complete"
-        )
+        def section_is_ready(driver):
 
-    def wait_for_jobs_to_load(self):
-        def jobs_loaded(driver):
+            try:
+                section = driver.find_element(
+                    By.CSS_SELECTOR,
+                    "section[data-automation-id='jobResults']"
+                )
 
-            title_elements = driver.find_elements(
-                By.CSS_SELECTOR,
-                "a[data-automation-id='jobTitle']"
-            )
+                cards = section.find_elements(By.XPATH, ".//li")
 
-            if len(title_elements) == 0:
-                return False
-
-            for el in title_elements:
-
-                text = el.text.strip()
-
-                if text == "":
+                if len(cards) == 0:
                     return False
 
-            return True
+                titles = section.find_elements(
+                    By.CSS_SELECTOR,
+                    "a[data-automation-id='jobTitle']"
+                )
 
-        WebDriverWait(self.driver, 30).until(jobs_loaded)
+                if len(titles) == 0:
+                    return False
 
+                # ensure at least some titles are non-empty
+                for t in titles:
+                    if t.text.strip():
+                        return True
+
+                return False
+
+            except:
+                return False
+
+        WebDriverWait(self.driver, 30).until(section_is_ready)
+
+        return self.driver.find_element(
+            By.CSS_SELECTOR,
+            "section[data-automation-id='jobResults']"
+        )
+   
     def get_pagination_info(self, section):
         try:
             ul = section.find_element(
@@ -218,22 +228,6 @@ class WorkdayScraper(BaseScraper):
 
         return jobInfo
     
-    def parse_job_card_with_retry(self, card):
-
-        for _ in range(3):
-
-            try:
-                return self.parse_job_card(card)
-
-            except (
-                StaleElementReferenceException,
-                NoSuchElementException
-            ):
-
-                time.sleep(1)
-
-        return None
-    
     def navigate_to_next_page(self):
 
         try:
@@ -259,13 +253,6 @@ class WorkdayScraper(BaseScraper):
                 EC.staleness_of(old_cards[0])
             )
 
-            # wait for new jobs to load
-            self.wait_for_page_ready()
-
-            self.wait_for_jobs_to_load()
-
-            time.sleep(1)
-
             return True
 
         except Exception as e:
@@ -278,12 +265,10 @@ class WorkdayScraper(BaseScraper):
     def run(self, url: str):
         parsed_jobs = []
         self.open_jobs_page(url)
-        self.wait_for_page_ready()
-        self.wait_for_jobs_to_load()
-        time.sleep(1)
+        eliminated = 0
 
         while True:
-            section = self.get_job_results_section()
+            section = self.wait_for_valid_job_section()
             pagination = self.get_pagination_info(section)
             if not pagination:
                 break
@@ -294,13 +279,16 @@ class WorkdayScraper(BaseScraper):
                 job = self.parse_job_card(card, current_page)
                 if filter.passes_preliminary_filters(job, current_page):
                     parsed_jobs.append(job)
+                else:
+                    eliminated += 1
             
             # break
             if current_page == total_pages:
                 break
             else:
-                self.navigate_to_next_page(section)
+                self.navigate_to_next_page()
         
+        print(f"Removed {eliminated} jobs")
         return parsed_jobs
 
             
