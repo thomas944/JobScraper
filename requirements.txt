@@ -1,0 +1,6 @@
+selenium
+webdriver-manager 
+beautifulsoup4 
+sqlalchemy 
+psycopg2-binary 
+pandas
