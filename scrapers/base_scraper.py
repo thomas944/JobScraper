@@ -11,7 +11,7 @@ class BaseScraper:
     def __init__(self):
         # 1. Setup options (Optional: run in headless mode without a GUI)
         options = webdriver.ChromeOptions()
-        # options.add_argument("--headless") 
+        options.add_argument("--headless") 
         options.add_argument("--start-maximized")
 
         # 2. Initialize the driver
@@ -21,7 +21,7 @@ class BaseScraper:
         )
         
         self.today = datetime.now(timezone.utc)
-        
+
     def close(self):
         self.driver.quit()
 

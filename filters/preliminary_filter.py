@@ -29,12 +29,15 @@ DESIRED_KEYWORDS = [
 def passes_preliminary_filters(job: JobCardInfo, page) -> bool:
     for word in BLOCKED_TITLE_WORDS:
         if word in job.title.lower():
-            print(f"Removing from page {page}: {job.title}")
+            # print(f"Removing from page {page}: {job.title}")
             return False
     
     for word in BLOCKED_COUNTRIES:
         if word in job.location.lower():
-            print(f"Removing from page {page}: {job.title}")
+            # print(f"Removing from page {page}: {job.title}")
             return False
     
     return True
+
+# def passes_secondary_filter(url: str) -> bool:
+    

@@ -12,3 +12,8 @@ class JobCardInfo:
     job_id: Optional[str]
     parsed_date: datetime
     link: Optional[str]
+
+@dataclass
+class JobDescriptionInfo:
+    end_date: Optional[str]
+    years_of_exp: Optional[str]

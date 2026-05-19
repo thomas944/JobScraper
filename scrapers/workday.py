@@ -7,12 +7,14 @@ from selenium.common.exceptions import (
 )
 
 from scrapers.base_scraper import BaseScraper
+from utils import utils
 from filters import preliminary_filter as filter
 import re
 from datetime import datetime, timedelta
-from utils.types import JobCardInfo
+from utils.types import JobCardInfo, JobDescriptionInfo
 from typing import Optional
 import time
+
 
 class WorkdayScraper(BaseScraper):
 
@@ -261,9 +263,54 @@ class WorkdayScraper(BaseScraper):
 
             return False
         
+    def parse_job_description(self, url: str) -> JobDescriptionInfo:
+        self.driver.get(url)
+
+        # wait for page load
+        WebDriverWait(self.driver, 30).until(
+            lambda d: d.execute_script("return document.readyState") == "complete"
+        )
+
+         # wait for description container
+        description_el = WebDriverWait(self.driver, 30).until(
+            EC.presence_of_element_located(
+                (By.CSS_SELECTOR, "div[data-automation-id='jobPostingDescription']")
+            )
+        )
+
+        text = description_el.text
+        yoe = self.extract_years_of_experience(text)
+
+        jobDescriptionInfo = JobDescriptionInfo(
+            end_date=None,
+            years_of_exp=yoe,
+        )
+
+        return jobDescriptionInfo
+    
+
+    def extract_years_of_experience(self, text: str):
+        text = utils.normalize_text(text)
+        text = utils.replace_words(text)
+
+        match = re.search(r"(\d+)\s*[-to]+\s*(\d+)\s*years", text)
+        if match:
+            return int(match.group(1)), int(match.group(2))
+
+        match = re.search(r"(\d+)\+?\s*years", text)
+        if match:
+            val = int(match.group(1))
+            return val, None  # open-ended
+
+        match = re.search(r"minimum\s*(\d+)\+?\s*years", text)
+        if match:
+            val = int(match.group(1))
+            return val, None
+
+        return None
     
     def run(self, url: str):
-        parsed_jobs = []
+        candidate_jobs = []
         self.open_jobs_page(url)
         eliminated = 0
 
@@ -278,7 +325,7 @@ class WorkdayScraper(BaseScraper):
             for card in cards:
                 job = self.parse_job_card(card, current_page)
                 if filter.passes_preliminary_filters(job, current_page):
-                    parsed_jobs.append(job)
+                    candidate_jobs.append(job)
                 else:
                     eliminated += 1
             
@@ -287,9 +334,14 @@ class WorkdayScraper(BaseScraper):
                 break
             else:
                 self.navigate_to_next_page()
-        
+                        #   print(self.parse_job_description(job.link))
         print(f"Removed {eliminated} jobs")
-        return parsed_jobs
+        print("------------Proceeding with secondary filtering------------")
+
+        parsed_jobs = []
+        for candidate in candidate_jobs:
+            print(f"{candidate.title}: {self.parse_job_description(candidate.link)}")
+        return candidate_jobs
 
             
     
