@@ -7,6 +7,9 @@
 
 
 # Usage
+> This tool helps simplify the tedious task of searching and reading through job descriptions by quickly scraping the availble jobs and filtering by **location, years of experience, degree**
+
+
 1. Set up your virtual environment for dependencies (optional, but recommended). Navigate to `#venv-setup` for instructions
 
 > venv is the recommended virtual environment
