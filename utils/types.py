@@ -16,4 +16,9 @@ class JobCardInfo:
 @dataclass
 class JobDescriptionInfo:
     end_date: Optional[str]
-    years_of_exp: Optional[str]
+    min_yoe: Optional[float]
+    max_yoe: Optional[float]
+    degrees: list[str]
+    min_salary: Optional[float]
+    max_salary: Optional[float]
+    pay_type: str

@@ -8,9 +8,9 @@ from selenium.common.exceptions import (
 
 from scrapers.base_scraper import BaseScraper
 from utils import utils
-from filters import preliminary_filter as filter
+from filters import workday_filter as filter
 import re
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 from utils.types import JobCardInfo, JobDescriptionInfo
 from typing import Optional
 import time
@@ -110,13 +110,13 @@ class WorkdayScraper(BaseScraper):
 
         return cards
     
-    def parse_posted_date(self, date_text: str) -> Optional[datetime]:
+    def parse_posted_date(self, date_text: str) -> Optional[date]:
         if not date_text:
             return None
-        
+
         text = date_text.strip().lower()
-        now = self.today
-    
+        now = self.today.date()
+
         if "today" in text:
             return now
 
@@ -278,41 +278,70 @@ class WorkdayScraper(BaseScraper):
             )
         )
 
-        text = description_el.text
-        yoe = self.extract_years_of_experience(text)
+        raw_text = description_el.text
+        yoe = self._yoe_parser.parse(raw_text)
+        salary = self._salary_parser.parse(raw_text)
 
         jobDescriptionInfo = JobDescriptionInfo(
             end_date=None,
-            years_of_exp=yoe,
+            min_yoe=yoe.min_years,
+            max_yoe=yoe.max_years,
+            degrees=yoe.degrees,
+            min_salary=salary.min_salary,
+            max_salary=salary.max_salary,
+            pay_type=salary.pay_type
         )
 
         return jobDescriptionInfo
     
+    def format_row(self, jobCard: JobCardInfo, jobDesc: JobDescriptionInfo):
+        row = {}
 
-    def extract_years_of_experience(self, text: str):
-        text = utils.normalize_text(text)
-        text = utils.replace_words(text)
+        if jobCard.page:
+            row["page"] = jobCard.page
+        
+        if jobCard.title:
+            row["title"] = jobCard.title
 
-        match = re.search(r"(\d+)\s*[-to]+\s*(\d+)\s*years", text)
-        if match:
-            return int(match.group(1)), int(match.group(2))
+        if jobCard.posted_date:
+            row["posted_date"] = jobCard.posted_date
 
-        match = re.search(r"(\d+)\+?\s*years", text)
-        if match:
-            val = int(match.group(1))
-            return val, None  # open-ended
+        if jobCard.job_id:
+            row["id"] = jobCard.job_id
 
-        match = re.search(r"minimum\s*(\d+)\+?\s*years", text)
-        if match:
-            val = int(match.group(1))
-            return val, None
+        if jobCard.link:
+            row["link"] = jobCard.link
 
-        return None
-    
+        if jobDesc.min_yoe and jobDesc.max_yoe:
+            row["yoe_range"] = f"{jobDesc.min_yoe} to {jobDesc.max_yoe}"
+        elif jobDesc.min_yoe:
+            row["yoe"] = jobDesc.min_yoe
+        elif jobDesc.max_yoe:
+            row["yoe"] = jobDesc.max_yoe
+        
+        if jobDesc.degrees:
+            row["degree"] = jobDesc.degrees
+        
+        if jobCard.location:
+            row["location"] = jobCard.location
+        
+        if jobDesc.min_salary and jobDesc.max_salary:
+            row["salary_range"] = f"{jobDesc.min_salary} to {jobDesc.max_salary}"
+        elif jobDesc.min_salary:
+            row["salary"] = jobDesc.min_salary
+        elif jobDesc.max_salary:
+            row["salary"] = jobDesc.max_salary
+        
+        if jobCard.parsed_date:
+            row["parsed_date"] = jobCard.parsed_date
+
+        return row
+
     def run(self, url: str):
         candidate_jobs = []
         self.open_jobs_page(url)
         eliminated = 0
+        print("------------Proceeding with initial filtering------------")
 
         while True:
             section = self.wait_for_valid_job_section()
@@ -335,13 +364,18 @@ class WorkdayScraper(BaseScraper):
             else:
                 self.navigate_to_next_page()
                         #   print(self.parse_job_description(job.link))
-        print(f"Removed {eliminated} jobs")
+        print(f"------------Removed {eliminated} jobs at initial filtering------------")
         print("------------Proceeding with secondary filtering------------")
-
+        eliminated = 0
         parsed_jobs = []
-        for candidate in candidate_jobs:
-            print(f"{candidate.title}: {self.parse_job_description(candidate.link)}")
-        return candidate_jobs
+        for job in candidate_jobs:
+            jobDescriptionInfo = self.parse_job_description(job.link)
+            if filter.passes_secondary_filters(jobDescriptionInfo):
+                parsed_jobs.append(self.format_row(job, jobDescriptionInfo))
+            else:
+                eliminated += 1
+        print(f"------------Removed {eliminated} jobs at secondary filtering------------")
+        return parsed_jobs
 
             
     

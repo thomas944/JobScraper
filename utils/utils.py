@@ -10,14 +10,30 @@ def normalize_text(text: str) -> str:
     text = text.replace("—", "-")
 
     return text
+        # 1. Matches "two (2) years" AND "two (2) years of experience"
+        # 2. Matches "2 years of experience" OR "two years of experience"
+        # 3. Existing Range patterns (e.g., 0-2 years or 0 to 2 years)
+        # 4. Existing Simple counts (e.g., 2+ years)
+        # 5. Existing "Minimum" patterns (e.g. minimum 2+ years, minimum 2 years, at least 2 years, at least 2+ years, etc)
 
 def extract_exp_patterns(text: str):
 
     patterns = [
-        r"(\d+)\s*[-to]+\s*(\d+)\s*\+?\s*years",        # 0-2 years
-        r"(\d+)\+?\s*years",                            # 2+ years
-        r"minimum\s*(\d+)\+?\s*years",                  # minimum 8+ years
-        r"at least\s*(\d+)\s*years",                    # at least 3 years
+        # 1. Matches "two (2) years" AND "two (2) years of experience"
+        r"\b(one|two|three|four|five|six|seven|eight|nine|ten)\s*\((\d+)\)\s*years?(?:\s+of\s+experience)?",
+
+        # 2. Matches "2 years of experience" OR "two years of experience"
+        r"\b(?:\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+years(?:\s+of\s+experience)?",
+
+        # 3. Existing Range patterns (e.g., 0-2 years)
+        r"(\d+)\s*[-to]+\s*(\d+)\s*\+?\s*years",
+
+        # 4. Existing Simple counts (e.g., 2+ years)
+        r"(\d+)\+?\s*years",
+
+        # 5. Existing "Minimum" patterns
+        r"minimum\s*(\d+)\+?\s*years",
+        r"at least\s*(\d+)\s*years",
     ]
 
     for p in patterns:

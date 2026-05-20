@@ -13,12 +13,12 @@ for row in records:
 
     valid_jobs = scraper.run(row["Workday Link"])
 
-    jobs_dicts = [
-        asdict(job)
-        for job in valid_jobs
-    ]
+    # jobs_dicts = [
+    #     asdict(job)
+    #     for job in valid_jobs
+    # ]
 
-    df = pd.DataFrame(jobs_dicts)
+    df = pd.DataFrame(valid_jobs)
 
     output_path = f"testing/{company_name}.csv"
 

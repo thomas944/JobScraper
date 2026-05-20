@@ -6,6 +6,8 @@ from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 import requests
 from datetime import datetime, timezone
+from utils.extractors.yoe import YOEParser
+from utils.extractors.salary import SalaryParser
 class BaseScraper:
 
     def __init__(self):
@@ -21,6 +23,8 @@ class BaseScraper:
         )
         
         self.today = datetime.now(timezone.utc)
+        self._yoe_parser = YOEParser()   # instantiate once; it's stateless
+        self._salary_parser = SalaryParser()
 
     def close(self):
         self.driver.quit()
