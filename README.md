@@ -24,7 +24,7 @@
 |`BLOCKED_COUNTRIES`| `[]str` | Countries to filter out in lowercase |
 |`DEGREES`| `[]str` | All your degrees. **Must be of type "PhD","Master's", "Bachelor's"** |
 
-3. `companies.csv` contains all the companies. If your company is not there, feel free to add it and make a pull request. The link is the company's Workday link. You should try your best to add as many filters as possible, and after that paste the link inside the spreadsheet
+3. `companies.csv` contains all the companies. If your desired company is not present in the `companies.csv`, feel free to add it and make a pull request. The link is the company's Workday link. You should try your best to add as many filters as possible to reduce the search space, and after that paste the link inside the spreadsheet
 
 4. Create a folder called `testing/`
 
