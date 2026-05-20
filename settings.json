@@ -7,7 +7,12 @@
         "senior",
         "sr.",
         "lead",
-        "manager"
+        "manager",
+        "director",
+        "president",
+        "vp",
+        "vice",
+        "architect"
     ],
     "BLOCKED_COUNTRIES":[
         "india",

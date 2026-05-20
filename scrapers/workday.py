@@ -270,13 +270,32 @@ class WorkdayScraper(BaseScraper):
         WebDriverWait(self.driver, 30).until(
             lambda d: d.execute_script("return document.readyState") == "complete"
         )
-
+        
+        selectors = [
+            (By.CSS_SELECTOR, "div[data-automation-id='jobPostingDescription']"),
+            (By.CSS_SELECTOR, "div.job-description"),
+            (By.CSS_SELECTOR, "[data-automation-id*='description']")
+        ]
          # wait for description container
-        description_el = WebDriverWait(self.driver, 30).until(
-            EC.presence_of_element_located(
-                (By.CSS_SELECTOR, "div[data-automation-id='jobPostingDescription']")
-            )
-        )
+        # description_el = WebDriverWait(self.driver, 30).until(
+        #     EC.presence_of_element_located(
+        #         (By.CSS_SELECTOR, "div[data-automation-id='jobPostingDescription']")
+        #     )
+        # )
+
+        description_el = None
+        for sel in selectors:
+            try:
+                description_el = WebDriverWait(self.driver, 10).until(
+                    EC.presence_of_element_located(sel)
+                )
+                break
+            except:
+                continue
+
+        if not description_el:
+            print(url)
+            raise Exception("Job description not found")
 
         raw_text = description_el.text
         yoe = self._yoe_parser.parse(raw_text)
@@ -352,11 +371,15 @@ class WorkdayScraper(BaseScraper):
 
             cards = self.get_job_cards(section)
             for card in cards:
-                job = self.parse_job_card(card, current_page)
-                if filter.passes_preliminary_filters(job, self.config.BLOCKED_TITLE_WORDS, self.config.BLOCKED_COUNTRIES):
-                    candidate_jobs.append(job)
-                else:
-                    eliminated += 1
+                try:
+                    job = self.parse_job_card(card, current_page)
+                    if filter.passes_preliminary_filters(job, self.config["BLOCKED_TITLE_WORDS"], self.config["BLOCKED_COUNTRIES"]):
+                        candidate_jobs.append(job)
+                    else:
+                        eliminated += 1
+                except Exception:
+                    continue
+
             
             # break
             if current_page == total_pages:
@@ -365,15 +388,19 @@ class WorkdayScraper(BaseScraper):
                 self.navigate_to_next_page()
                         #   print(self.parse_job_description(job.link))
         print(f"------------Removed {eliminated} jobs at initial filtering------------")
-        print("------------Proceeding with secondary filtering------------")
+        print(f"------------Proceeding with secondary filtering, {len(candidate_jobs)} remaining------------")
         eliminated = 0
         parsed_jobs = []
         for job in candidate_jobs:
-            jobDescriptionInfo = self.parse_job_description(job.link)
-            if filter.passes_secondary_filters(jobDescriptionInfo, self.config.DEGREES, self.config.MIN_YOE, self.config.MAX_YOE):
-                parsed_jobs.append(self.format_row(job, jobDescriptionInfo))
-            else:
-                eliminated += 1
+            try:
+                jobDescriptionInfo = self.parse_job_description(job.link)
+                if filter.passes_secondary_filters(jobDescriptionInfo, self.config["DEGREES"], self.config["MIN_YOE"], self.config["MAX_YOE"]):
+                    parsed_jobs.append(self.format_row(job, jobDescriptionInfo))
+                else:
+                    eliminated += 1
+            except Exception:
+                continue
+
         print(f"------------Removed {eliminated} jobs at secondary filtering------------")
         return parsed_jobs
 

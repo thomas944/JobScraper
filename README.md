@@ -3,7 +3,7 @@
 - [Installation](#installation)
   - [venv Setup](#venv-setup)
   - [Debugger Setup](#debugger-setup)
-
+- [In Progress](#in-progress)
 
 
 # Usage
@@ -88,5 +88,10 @@ Optional steps to set up debugger (recommended if developer)
 5. Set a breakpoint and press `Run` -> `Start Debugging`. You should jump to your breakpoint
 
 
-## Setting up 
-TODO: Different modes, mode 1: scrape everything in links.csv, mode 2: scrape only specific target companies, or industries
+### In Progress
+- Different modes, mode 1: scrape everything in links.csv, mode 2: scrape only specific target companies, or industries
+- Create a UI
+- Create a file for jobs posted today
+- Create a file for jobs expiring soon
+- Allow user to filter by industry, company name, etc
+- Support other job portals besides Workday
