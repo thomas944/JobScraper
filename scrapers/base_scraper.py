@@ -8,6 +8,7 @@ import requests
 from datetime import datetime, timezone
 from utils.extractors.yoe import YOEParser
 from utils.extractors.salary import SalaryParser
+import json
 class BaseScraper:
 
     def __init__(self):
@@ -25,6 +26,10 @@ class BaseScraper:
         self.today = datetime.now(timezone.utc)
         self._yoe_parser = YOEParser()   # instantiate once; it's stateless
         self._salary_parser = SalaryParser()
+        
+        with open("settings.json", "r") as f:
+            self.config = json.load(f)
+
 
     def close(self):
         self.driver.quit()

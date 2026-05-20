@@ -1,35 +1,8 @@
 from utils.types import JobCardInfo, JobDescriptionInfo
 from utils.utils import STATE_NAMES, STATE_ABBR, DESIRED_COUNTRY
-BLOCKED_TITLE_WORDS = [
-    "principal",
-    "staff",
-    "senior",
-    "sr.",
-    "lead",
-    "manager"
-]
 
-BLOCKED_COUNTRIES = [
-    "india",
-    "poland",
-    "mexico",
-    "japan",
-    "taiwan",
-    "singapore"
-]
 
-DESIRED_KEYWORDS = [
-
-]
-
-DEGREES = [
-    "Bachelor's"
-]
-
-MIN_YOE = 0
-MAX_YOE = 2
-
-def passes_preliminary_filters(job: JobCardInfo, page) -> bool:
+def passes_preliminary_filters(job: JobCardInfo, BLOCKED_TITLE_WORDS, BLOCKED_COUNTRIES) -> bool:
     title = job.title.lower()
     for word in BLOCKED_TITLE_WORDS:
         if word in title:
@@ -53,7 +26,7 @@ def passes_preliminary_filters(job: JobCardInfo, page) -> bool:
     
     return False
 
-def passes_secondary_filters(job: JobDescriptionInfo) -> bool:
+def passes_secondary_filters(job: JobDescriptionInfo, DEGREES, MIN_YOE, MAX_YOE) -> bool:
     if "Master's" in job.degrees and "Master's" not in DEGREES:
         return False
     if "PhD" in job.degrees and "PhD" not in DEGREES:

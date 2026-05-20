@@ -353,7 +353,7 @@ class WorkdayScraper(BaseScraper):
             cards = self.get_job_cards(section)
             for card in cards:
                 job = self.parse_job_card(card, current_page)
-                if filter.passes_preliminary_filters(job, current_page):
+                if filter.passes_preliminary_filters(job, self.config.BLOCKED_TITLE_WORDS, self.config.BLOCKED_COUNTRIES):
                     candidate_jobs.append(job)
                 else:
                     eliminated += 1
@@ -370,7 +370,7 @@ class WorkdayScraper(BaseScraper):
         parsed_jobs = []
         for job in candidate_jobs:
             jobDescriptionInfo = self.parse_job_description(job.link)
-            if filter.passes_secondary_filters(jobDescriptionInfo):
+            if filter.passes_secondary_filters(jobDescriptionInfo, self.config.DEGREES, self.config.MIN_YOE, self.config.MAX_YOE):
                 parsed_jobs.append(self.format_row(job, jobDescriptionInfo))
             else:
                 eliminated += 1

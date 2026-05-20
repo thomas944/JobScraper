@@ -1,0 +1,23 @@
+{
+    "MIN_YOE": 0,
+    "MAX_YOE": 2,
+    "BLOCKED_TITLE_WORDS": [
+        "principal",
+        "staff",
+        "senior",
+        "sr.",
+        "lead",
+        "manager"
+    ],
+    "BLOCKED_COUNTRIES":[
+        "india",
+        "poland",
+        "mexico",
+        "japan",
+        "taiwan",
+        "singapore"
+    ],
+    "DEGREES":[
+        "Bachelor's"
+    ]
+}
