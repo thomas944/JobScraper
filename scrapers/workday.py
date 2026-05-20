@@ -390,10 +390,13 @@ class WorkdayScraper(BaseScraper):
         print(f"------------Removed {eliminated} jobs at initial filtering------------")
         print(f"------------Proceeding with secondary filtering, {len(candidate_jobs)} remaining------------")
         eliminated = 0
+        # visited_jobs = 0
         parsed_jobs = []
         for job in candidate_jobs:
             try:
                 jobDescriptionInfo = self.parse_job_description(job.link)
+                # visited_jobs += 1
+                # print(visited_jobs)
                 if filter.passes_secondary_filters(jobDescriptionInfo, self.config["DEGREES"], self.config["MIN_YOE"], self.config["MAX_YOE"]):
                     parsed_jobs.append(self.format_row(job, jobDescriptionInfo))
                 else:

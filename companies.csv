@@ -2,12 +2,12 @@ Company,Industry,Market Cap,Workday Link,Last Scraped,Job Site
 Comcast,"Media,Telecom",Whatever,https://comcast.wd5.myworkdayjobs.com/en-US/Comcast_Careers?jobFamilyGroup=285386867dd9010665c0d2c57d0b4c15&jobFamilyGroup=285386867dd901a0ab5627c67d0b5815&jobFamilyGroup=285386867dd9012db7e3ddc57d0b4e15,2026-05-20,Workday
 Micron,"Semis,Memory",Whatever,https://micron.wd1.myworkdayjobs.com/External?q=software%20engineer&jobFamilyGroup=bff7a31dbdd301db168e7e0caa010662,2026-05-20,Workday
 Adobe,SaaS,Whatever,https://adobe.wd5.myworkdayjobs.com/external_experienced?q=software%20engineer&locationCountry=bc33aa3152ec42d4995f4791a106ed09,2026-05-20,Workday
-Raytheon,Defense,,https://globalhr.wd5.myworkdayjobs.com/en-US/REC_RTX_Ext_Gateway?q=software%20engineer,,Workday
+Raytheon,Defense,,https://globalhr.wd5.myworkdayjobs.com/en-US/REC_RTX_Ext_Gateway?q=software%20engineer,2026-05-20,Workday
 General Motors,Auto,,https://generalmotors.wd5.myworkdayjobs.com/Careers_GM?q=software%20engineer&Location_Country=bc33aa3152ec42d4995f4791a106ed09,2026-05-20,Workday
-Cisco,IT,,https://cisco.wd5.myworkdayjobs.com/Cisco_Careers?q=software%20engineer,,Workday
-Intel,Semis,,https://intel.wd1.myworkdayjobs.com/External?q=software%20engineer,,Workday
-Workday,SaaS,,https://workday.wd5.myworkdayjobs.com/Workday?q=software%20engineer,,Workday
+Cisco,IT,,https://cisco.wd5.myworkdayjobs.com/Cisco_Careers?q=software%20engineer,2026-05-20,Workday
+Intel,Semis,,https://intel.wd1.myworkdayjobs.com/External?q=software%20engineer,2026-05-20,Workday
+Workday,SaaS,,https://workday.wd5.myworkdayjobs.com/Workday?q=software%20engineer,2026-05-20,Workday
 CVS,Health,,https://cvshealth.wd1.myworkdayjobs.com/CVS_Health_Careers?q=software%20engineer,2026-05-20,Workday
 HP,IT,,https://hp.wd5.myworkdayjobs.com/ExternalCareerSite?q=software%20engineer&Location_Country=bc33aa3152ec42d4995f4791a106ed09,2026-05-20,Workday
-HPE,IT,,https://hpe.wd5.myworkdayjobs.com/Jobsathpe?q=software%20engineer,,Workday
+HPE,IT,,https://hpe.wd5.myworkdayjobs.com/Jobsathpe?q=software%20engineer,2026-05-20,Workday
 Salesforce,,,https://salesforce.wd12.myworkdayjobs.com/External_Career_Site?q=software%20engineer&CF_-_REC_-_LRV_-_Job_Posting_Anchor_-_Country_from_Job_Posting_Location_Extended=bc33aa3152ec42d4995f4791a106ed09,2026-05-20,Workday

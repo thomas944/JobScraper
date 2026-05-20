@@ -24,7 +24,7 @@ for row in records:
         df.to_csv(output_path, index=False)
 
         print(f"Saved {len(valid_jobs)} jobs to {output_path}\n")
-        rows.loc[rows["Company"] == company_name, "Last Scraped"] = today
+        rows.loc[rows["Company"] == company_name, "Last Scraped"] = str(today)
         # except Exception:
         #     continue
         # finally:
