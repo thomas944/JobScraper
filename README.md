@@ -9,6 +9,9 @@
 # Usage
 > This tool helps simplify the tedious task of searching and reading through job descriptions by quickly scraping the availble jobs and filtering by **location, years of experience, degree**
 
+> *THIS TOOL DOES NOT COMPLETELY AUTOMATE EVERYTHING AND IS STILL A WORK IN PROGRESS. IT JUST HELPS FILTER REDUCE THE AMOUNT OF TIME READING JOB DESCRIPTIONS*. 
+
+> It is only compatible with companies that user Workday as of now, and the user still needs to manually add the link to company's Workday site as well as manually apply.
 
 1. Set up your virtual environment for dependencies (optional, but recommended). Navigate to `#venv-setup` for instructions
 
