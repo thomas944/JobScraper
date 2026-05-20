@@ -224,7 +224,7 @@ class WorkdayScraper(BaseScraper):
             remote_type=remote_type,
             posted_date=self.parse_posted_date(posted_date),
             job_id=job_id,
-            parsed_date=self.today,
+            parsed_date=self.today.date(),
             link=link
         )
 
@@ -306,18 +306,18 @@ class WorkdayScraper(BaseScraper):
         if jobCard.posted_date:
             row["posted_date"] = jobCard.posted_date
 
-        if jobCard.job_id:
-            row["id"] = jobCard.job_id
-
-        if jobCard.link:
-            row["link"] = jobCard.link
-
         if jobDesc.min_yoe and jobDesc.max_yoe:
-            row["yoe_range"] = f"{jobDesc.min_yoe} to {jobDesc.max_yoe}"
+            row["yoe_range"] = f"{jobDesc.min_yoe},{jobDesc.max_yoe}"
         elif jobDesc.min_yoe:
             row["yoe"] = jobDesc.min_yoe
         elif jobDesc.max_yoe:
             row["yoe"] = jobDesc.max_yoe
+
+        if jobCard.link:
+            row["link"] = jobCard.link
+
+        if jobCard.job_id:
+            row["id"] = jobCard.job_id
         
         if jobDesc.degrees:
             row["degree"] = jobDesc.degrees
@@ -326,7 +326,7 @@ class WorkdayScraper(BaseScraper):
             row["location"] = jobCard.location
         
         if jobDesc.min_salary and jobDesc.max_salary:
-            row["salary_range"] = f"{jobDesc.min_salary} to {jobDesc.max_salary}"
+            row["salary_range"] = f"{jobDesc.min_salary},{jobDesc.max_salary}"
         elif jobDesc.min_salary:
             row["salary"] = jobDesc.min_salary
         elif jobDesc.max_salary:
