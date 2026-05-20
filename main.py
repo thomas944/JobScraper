@@ -10,6 +10,7 @@ records = rows.to_dict(orient="records")
 
 for row in records:
     company_name = row["Company"]
+    print(f"Scraping jobs from {company_name}")
 
     valid_jobs = scraper.run(row["Workday Link"])
 
@@ -24,5 +25,5 @@ for row in records:
 
     df.to_csv(output_path, index=False)
 
-    print(f"Saved {len(valid_jobs)} jobs to {output_path}")
+    print(f"Saved {len(valid_jobs)} jobs to {output_path}\n")
     

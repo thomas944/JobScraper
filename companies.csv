@@ -1,2 +1,4 @@
-Company,Industry,Market Cap,Workday Link,Last Scraped
-Comcast,ABC,Whatever,https://comcast.wd5.myworkdayjobs.com/en-US/Comcast_Careers?jobFamilyGroup=285386867dd9010665c0d2c57d0b4c15&jobFamilyGroup=285386867dd901a0ab5627c67d0b5815&jobFamilyGroup=285386867dd9012db7e3ddc57d0b4e15,Whenever
+Company,Industry,Market Cap,Workday Link,Last Scraped,Job Site
+Comcast,ABC,Whatever,https://comcast.wd5.myworkdayjobs.com/en-US/Comcast_Careers?jobFamilyGroup=285386867dd9010665c0d2c57d0b4c15&jobFamilyGroup=285386867dd901a0ab5627c67d0b5815&jobFamilyGroup=285386867dd9012db7e3ddc57d0b4e15,Whenever," workday"
+Micron,SEMIS,Whatever,https://micron.wd1.myworkdayjobs.com/External?q=software%20engineer&jobFamilyGroup=bff7a31dbdd301db168e7e0caa010662,Whenever," workday"
+Broadcom
