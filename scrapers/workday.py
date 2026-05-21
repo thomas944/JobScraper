@@ -124,6 +124,9 @@ class WorkdayScraper(BaseScraper):
         if "yesterday" in text:
             return now - timedelta(days=1)
 
+        if "30+" in text:
+            return datetime(1999, 1, 1)
+        
         # Posted X Days Ago
         match = re.search(r'(\d+)\s+day', text)
 
@@ -362,50 +365,54 @@ class WorkdayScraper(BaseScraper):
         eliminated = 0
         print("------------Proceeding with initial filtering------------")
 
-        while True:
-            section = self.wait_for_valid_job_section()
-            pagination = self.get_pagination_info(section)
-            if not pagination:
-                break
-            current_page, total_pages = pagination
+        try:
+            while True:
+                section = self.wait_for_valid_job_section()
+                pagination = self.get_pagination_info(section)
+                if not pagination:
+                    break
+                current_page, total_pages = pagination
 
-            cards = self.get_job_cards(section)
-            for card in cards:
+                cards = self.get_job_cards(section)
+                for card in cards:
+                    try:
+                        job = self.parse_job_card(card, current_page)
+                        if filter.passes_preliminary_filters(job, self.config["BLOCKED_TITLE_WORDS"], self.config["BLOCKED_COUNTRIES"]):
+                            candidate_jobs.append(job)
+                        else:
+                            eliminated += 1
+                    except Exception:
+                        continue
+
+                
+                # break
+                if current_page == total_pages:
+                    break
+                else:
+                    self.navigate_to_next_page()
+                            #   print(self.parse_job_description(job.link))
+            print(f"------------Removed {eliminated} jobs at initial filtering------------")
+            print(f"------------Proceeding with secondary filtering, {len(candidate_jobs)} remaining------------")
+            eliminated = 0
+            # visited_jobs = 0
+            parsed_jobs = []
+            for job in candidate_jobs:
                 try:
-                    job = self.parse_job_card(card, current_page)
-                    if filter.passes_preliminary_filters(job, self.config["BLOCKED_TITLE_WORDS"], self.config["BLOCKED_COUNTRIES"]):
-                        candidate_jobs.append(job)
+                    jobDescriptionInfo = self.parse_job_description(job.link)
+                    # visited_jobs += 1
+                    # print(visited_jobs)
+                    if filter.passes_secondary_filters(jobDescriptionInfo, self.config["DEGREES"], self.config["MIN_YOE"], self.config["MAX_YOE"]):
+                        parsed_jobs.append(self.format_row(job, jobDescriptionInfo))
                     else:
                         eliminated += 1
                 except Exception:
                     continue
 
-            
-            # break
-            if current_page == total_pages:
-                break
-            else:
-                self.navigate_to_next_page()
-                        #   print(self.parse_job_description(job.link))
-        print(f"------------Removed {eliminated} jobs at initial filtering------------")
-        print(f"------------Proceeding with secondary filtering, {len(candidate_jobs)} remaining------------")
-        eliminated = 0
-        # visited_jobs = 0
-        parsed_jobs = []
-        for job in candidate_jobs:
-            try:
-                jobDescriptionInfo = self.parse_job_description(job.link)
-                # visited_jobs += 1
-                # print(visited_jobs)
-                if filter.passes_secondary_filters(jobDescriptionInfo, self.config["DEGREES"], self.config["MIN_YOE"], self.config["MAX_YOE"]):
-                    parsed_jobs.append(self.format_row(job, jobDescriptionInfo))
-                else:
-                    eliminated += 1
-            except Exception:
-                continue
-
-        print(f"------------Removed {eliminated} jobs at secondary filtering------------")
-        return parsed_jobs
+            print(f"------------Removed {eliminated} jobs at secondary filtering------------")
+            return parsed_jobs
+        except Exception:
+            print("------------Encountered error while scraping for this company, returning empty array------------")
+            return []
 
             
     

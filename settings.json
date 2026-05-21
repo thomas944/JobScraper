@@ -12,7 +12,17 @@
         "president",
         "vp",
         "vice",
-        "architect"
+        "architect",
+        "repairman",
+        "mechanical",
+        "assembler",
+        "assembly",
+        "environmental",
+        "talent acquisition",
+        "machinist",
+        "supervisor",
+        "repair",
+        "flammability"
     ],
     "BLOCKED_COUNTRIES":[
         "india",
@@ -24,5 +34,18 @@
     ],
     "DEGREES":[
         "Bachelor's"
+    ],
+    "PREFERRED_TITLE_KEYWORDS": [
+        "software",
+        "software",
+        "fullstack",
+        "backend",
+        "frontend",
+        "full stack",
+        "back end",
+        "front end",
+        "developer",
+        "engineer",
+        "data"
     ]
 }

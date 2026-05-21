@@ -1,8 +1,11 @@
+from datetime import datetime
 from utils.types import JobCardInfo, JobDescriptionInfo
 from utils.utils import STATE_NAMES, STATE_ABBR, DESIRED_COUNTRY
 
 
 def passes_preliminary_filters(job: JobCardInfo, BLOCKED_TITLE_WORDS, BLOCKED_COUNTRIES) -> bool:
+    if job.posted_date == datetime(1999, 1, 1):
+        return False
     title = job.title.lower()
     for word in BLOCKED_TITLE_WORDS:
         if word in title:

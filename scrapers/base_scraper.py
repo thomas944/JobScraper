@@ -9,6 +9,8 @@ from datetime import datetime, timezone
 from utils.extractors.yoe import YOEParser
 from utils.extractors.salary import SalaryParser
 import json
+from zoneinfo import ZoneInfo
+
 class BaseScraper:
 
     def __init__(self):
@@ -23,7 +25,7 @@ class BaseScraper:
             options=options
         )
         
-        self.today = datetime.now(timezone.utc)
+        self.today = datetime.now(ZoneInfo("America/Chicago"))
         self._yoe_parser = YOEParser()   # instantiate once; it's stateless
         self._salary_parser = SalaryParser()
         
