@@ -12,6 +12,7 @@ class JobCardInfo:
     job_id: Optional[str]
     parsed_date: datetime
     link: Optional[str]
+    days_old: Optional[int]
 
 @dataclass
 class JobDescriptionInfo:

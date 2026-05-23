@@ -1,3 +1,4 @@
+import pandas as pd
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -17,6 +18,9 @@ import time
 
 
 class WorkdayScraper(BaseScraper):
+    def __init__(self, priority_dfs: dict[int, pd.DataFrame]):
+        super().__init__()
+        self.priority_dfs = priority_dfs
 
     def open_jobs_page(self, url: str):
         self.driver.get(url)
@@ -96,7 +100,6 @@ class WorkdayScraper(BaseScraper):
             # "current_page": current_page,
             # "total_pages": total_pages
         
-
     def get_job_cards(self, section):
         jobs_list = section.find_element(
             By.CSS_SELECTOR,
@@ -110,47 +113,63 @@ class WorkdayScraper(BaseScraper):
 
         return cards
     
-    def parse_posted_date(self, date_text: str) -> Optional[date]:
+    def parse_posted_date(self, date_text: str) -> tuple[Optional[date], Optional[int]]:
+
         if not date_text:
-            return None
+            return None, None
 
         text = date_text.strip().lower()
         now = self.today.date()
 
+        parsed_date = None
+        days_old = None
+
+        # Today
         if "today" in text:
-            return now
+            parsed_date = now
+            days_old = 0
 
-        # Posted Yesterday
-        if "yesterday" in text:
-            return now - timedelta(days=1)
+        # Yesterday
+        elif "yesterday" in text:
+            parsed_date = now - timedelta(days=1)
+            days_old = 1
 
-        if "30+" in text:
-            return datetime(1999, 1, 1)
-        
-        # Posted X Days Ago
-        match = re.search(r'(\d+)\s+day', text)
+        # 30+ days ago
+        elif "30+" in text:
+            parsed_date = date(1999, 1, 1)
+            days_old = 9999
 
-        if match:
-            days = int(match.group(1))
-            return now - timedelta(days=days)
+        # X days ago
+        elif match := re.search(r"(\d+)\s+day", text):
+            days_old = int(match.group(1))
+            parsed_date = now - timedelta(days=days_old)
 
-        # Posted X Weeks Ago
-        match = re.search(r'(\d+)\s+week', text)
-
-        if match:
+        # X weeks ago
+        elif match := re.search(r"(\d+)\s+week", text):
             weeks = int(match.group(1))
-            return now - timedelta(weeks=weeks)
+            days_old = weeks * 7
+            parsed_date = now - timedelta(days=days_old)
 
-        # Posted X Months Ago
-        match = re.search(r'(\d+)\s+month', text)
-
-        if match:
+        # X months ago
+        elif match := re.search(r"(\d+)\s+month", text):
             months = int(match.group(1))
+            days_old = months * 30
+            parsed_date = now - timedelta(days=days_old)
 
-            # approximate month length
-            return now - timedelta(days=months * 30)
+        if parsed_date is None:
+            return None, None
 
-        return None
+        # Priority calculation
+        # if days_old <= 2:
+        #     priority = 1
+        # elif days_old <= 7:
+        #     priority = 2
+        # elif days_old <= 30:
+        #     priority = 3
+        # else:
+        #     priority = 4
+
+        return parsed_date, days_old
 
     def parse_job_card(self, card, page) -> JobCardInfo:
         try:
@@ -220,15 +239,17 @@ class WorkdayScraper(BaseScraper):
         except:
             job_id = None
 
+        posted_date, days_old = self.parse_posted_date(posted_date)
         jobInfo = JobCardInfo(
             page=page,
             title=title,
             location=location,
             remote_type=remote_type,
-            posted_date=self.parse_posted_date(posted_date),
+            posted_date=posted_date,
             job_id=job_id,
             parsed_date=self.today.date(),
-            link=link
+            link=link,
+            days_old=days_old
         )
 
         return jobInfo
@@ -358,61 +379,156 @@ class WorkdayScraper(BaseScraper):
             row["parsed_date"] = jobCard.parsed_date
 
         return row
+    
+    def process_with_retries(
+        self,
+        items,
+        processor,
+        max_retries: int = 1
+    ):
+        """
+        Generic retry processor.
 
-    def run(self, url: str):
-        candidate_jobs = []
-        self.open_jobs_page(url)
-        eliminated = 0
-        print("------------Proceeding with initial filtering------------")
+        Args:
+            items:
+                Iterable of items to process.
 
-        try:
-            while True:
-                section = self.wait_for_valid_job_section()
-                pagination = self.get_pagination_info(section)
-                if not pagination:
-                    break
-                current_page, total_pages = pagination
+            processor:
+                Function that processes one item.
+                Should:
+                    return result -> success
+                    return None   -> filtered/skipped
+                    raise Exception -> retry
 
-                cards = self.get_job_cards(section)
-                for card in cards:
-                    try:
-                        job = self.parse_job_card(card, current_page)
-                        if filter.passes_preliminary_filters(job, self.config["BLOCKED_TITLE_WORDS"], self.config["BLOCKED_COUNTRIES"]):
-                            candidate_jobs.append(job)
-                        else:
-                            eliminated += 1
-                    except Exception:
-                        continue
+            max_retries:
+                Number of retry attempts.
 
-                
-                # break
-                if current_page == total_pages:
-                    break
-                else:
-                    self.navigate_to_next_page()
-                            #   print(self.parse_job_description(job.link))
-            print(f"------------Removed {eliminated} jobs at initial filtering------------")
-            print(f"------------Proceeding with secondary filtering, {len(candidate_jobs)} remaining------------")
-            eliminated = 0
-            # visited_jobs = 0
-            parsed_jobs = []
-            for job in candidate_jobs:
+        Returns:
+            successes
+            filtered_count
+            failed_items
+        """
+
+        remaining_items = list(items)
+
+        successes = []
+        filtered_count = 0
+
+        for attempt in range(max_retries + 1):
+            next_failures = []
+
+            for item in remaining_items:
                 try:
-                    jobDescriptionInfo = self.parse_job_description(job.link)
-                    # visited_jobs += 1
-                    # print(visited_jobs)
-                    if filter.passes_secondary_filters(jobDescriptionInfo, self.config["DEGREES"], self.config["MIN_YOE"], self.config["MAX_YOE"]):
-                        parsed_jobs.append(self.format_row(job, jobDescriptionInfo))
+                    result = processor(item)
+
+                    if result is not None:
+                        successes.append(result)
                     else:
-                        eliminated += 1
+                        filtered_count += 1
+
                 except Exception:
-                    continue
+                    next_failures.append(item)
 
-            print(f"------------Removed {eliminated} jobs at secondary filtering------------")
-            return parsed_jobs
-        except Exception:
+            remaining_items = next_failures
+
+            if not remaining_items:
+                break
+
+        return successes, filtered_count, remaining_items
+
+
+    def process_job_card(self, item):
+        card, current_page = item
+
+        job = self.parse_job_card(card, current_page)
+
+        if filter.passes_preliminary_filters(
+            job,
+            self.config["BLOCKED_TITLE_WORDS"],
+            self.config["BLOCKED_COUNTRIES"]
+        ):
+            return job
+
+        return None
+    
+    def stage_one(self, url: str):
+        print("------------Proceeding with initial filtering------------")
+        self.open_jobs_page(url)
+
+        all_cards = []
+
+        while True:
+            section = self.wait_for_valid_job_section()
+
+            pagination = self.get_pagination_info(section)
+            if not pagination:
+                break
+
+            current_page, total_pages = pagination
+
+            cards = self.get_job_cards(section)
+
+            all_cards.extend(
+                (card, current_page)
+                for card in cards
+            )
+
+            if current_page == total_pages:
+                break
+
+            self.navigate_to_next_page()
+
+        candidate_jobs, eliminated, failed = self.process_with_retries(
+            items=all_cards,
+            processor=self.process_job_card,
+            max_retries=1
+        )
+
+        print(f"------------Stage one permanent failures: {len(failed)}------------")
+        print(f"------------Removed {eliminated} jobs at initial filtering------------")
+
+        return candidate_jobs
+
+    def process_job_description(self, job):
+        job_description_info = self.parse_job_description(job.link)
+
+        if not filter.passes_secondary_filters(
+            job_description_info,
+            self.config["DEGREES"],
+            self.config["MIN_YOE"],
+            self.config["MAX_YOE"]
+        ):
+            return None
+
+        priority = self.get_priority(job["days_old"])
+
+        self.priority_dfs[priority].loc[
+            len(self.priority_dfs[priority])
+        ] = self.format_row(job, job_description_info)
+
+        return job
+
+    def stage_two(self, candidate_jobs):
+        print(f"------------Proceeding with secondary filtering, {len(candidate_jobs)} remaining------------")
+        _, eliminated, failed = self.process_with_retries(
+            items=candidate_jobs,
+            processor=self.process_job_description,
+            max_retries=1
+        )
+        print(f"------------Stage two permanent failures: {len(failed)}------------")
+        print(f"------------Removed {eliminated} jobs at initial filtering------------")
+        return None
+
+        
+    def run(self, url: str):
+        try:
+            candidate_jobs = self.stage_one(url)
+
+            self.stage_two(candidate_jobs)
+
+        except Exception as e:
             print("------------Encountered error while scraping for this company, returning empty array------------")
-            return []
-
+            print(e)
             
+                
     

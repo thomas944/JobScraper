@@ -11,6 +11,12 @@ rows = pd.read_csv(file_path, dtype={
 scraper = WorkdayScraper()
 today = datetime.now(ZoneInfo("America/Chicago")).date()
 records = rows.to_dict(orient="records")
+priority_dfs = {
+    1: pd.DataFrame(columns=["title"]),
+    2: pd.DataFrame(columns=["title"]),
+    3: pd.DataFrame(columns=["title"]),
+    4: pd.DataFrame(columns=["title"]),
+}
 
 for row in records:
     if pd.isna(row["Last Scraped"]) or row["Last Scraped"] != today.isoformat():        

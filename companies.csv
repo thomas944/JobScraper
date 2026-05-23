@@ -1,14 +1,48 @@
-Company,Industry,Market Cap,Workday Link,Last Scraped,Job Site
-Comcast,"Media,Telecom",Whatever,https://comcast.wd5.myworkdayjobs.com/en-US/Comcast_Careers?jobFamilyGroup=285386867dd9010665c0d2c57d0b4c15&jobFamilyGroup=285386867dd901a0ab5627c67d0b5815&jobFamilyGroup=285386867dd9012db7e3ddc57d0b4e15,2026-05-20,Workday
-Micron,"Semis,Memory",Whatever,https://micron.wd1.myworkdayjobs.com/External?q=software%20engineer&jobFamilyGroup=bff7a31dbdd301db168e7e0caa010662,2026-05-20,Workday
-Adobe,SaaS,Whatever,https://adobe.wd5.myworkdayjobs.com/external_experienced?q=software%20engineer&locationCountry=bc33aa3152ec42d4995f4791a106ed09,2026-05-20,Workday
-Raytheon,Defense,,https://globalhr.wd5.myworkdayjobs.com/en-US/REC_RTX_Ext_Gateway?q=software%20engineer,2026-05-20,Workday
-General Motors,Auto,,https://generalmotors.wd5.myworkdayjobs.com/Careers_GM?q=software%20engineer&Location_Country=bc33aa3152ec42d4995f4791a106ed09,2026-05-20,Workday
-Cisco,IT,,https://cisco.wd5.myworkdayjobs.com/Cisco_Careers?q=software%20engineer,2026-05-20,Workday
-Intel,Semis,,https://intel.wd1.myworkdayjobs.com/External?q=software%20engineer,2026-05-20,Workday
-Workday,SaaS,,https://workday.wd5.myworkdayjobs.com/Workday?q=software%20engineer,2026-05-20,Workday
-CVS,Health,,https://cvshealth.wd1.myworkdayjobs.com/CVS_Health_Careers?q=software%20engineer,2026-05-20,Workday
-HP,IT,,https://hp.wd5.myworkdayjobs.com/ExternalCareerSite?q=software%20engineer&Location_Country=bc33aa3152ec42d4995f4791a106ed09,2026-05-20,Workday
-HPE,IT,,https://hpe.wd5.myworkdayjobs.com/Jobsathpe?q=software%20engineer,2026-05-20,Workday
-Salesforce,SaaS,,https://salesforce.wd12.myworkdayjobs.com/External_Career_Site?q=software%20engineer&CF_-_REC_-_LRV_-_Job_Posting_Anchor_-_Country_from_Job_Posting_Location_Extended=bc33aa3152ec42d4995f4791a106ed09,2026-05-20,Workday
-Fidelity,Finance,,https://wd1.myworkdaysite.com/en-US/recruiting/fmr/FidelityCareers/jobs?q=software+engineer&locationCountry=bc33aa3152ec42d4995f4791a106ed09,2026-05-20,Workday
+Company,Industry,Sub Industry,Market Cap,Workday Link,Last Scraped,Job Site
+Comcast,,"Media,Telecom",Whatever,https://comcast.wd5.myworkdayjobs.com/en-US/Comcast_Careers?jobFamilyGroup=285386867dd9010665c0d2c57d0b4c15&jobFamilyGroup=285386867dd901a0ab5627c67d0b5815&jobFamilyGroup=285386867dd9012db7e3ddc57d0b4e15,2026-05-22,Workday
+Micron,,"Semis,Memory",Whatever,https://micron.wd1.myworkdayjobs.com/External?q=software%20engineer&jobFamilyGroup=bff7a31dbdd301db168e7e0caa010662,2026-05-22,Workday
+Adobe,,SaaS,Whatever,https://adobe.wd5.myworkdayjobs.com/external_experienced?q=software%20engineer&locationCountry=bc33aa3152ec42d4995f4791a106ed09,2026-05-22,Workday
+Raytheon,,Defense,,https://globalhr.wd5.myworkdayjobs.com/en-US/REC_RTX_Ext_Gateway?q=software%20engineer,2026-05-20,Workday
+General Motors,,Auto,,https://generalmotors.wd5.myworkdayjobs.com/Careers_GM?q=software%20engineer&Location_Country=bc33aa3152ec42d4995f4791a106ed09,2026-05-20,Workday
+Cisco,,IT,,https://cisco.wd5.myworkdayjobs.com/Cisco_Careers?q=software%20engineer,2026-05-20,Workday
+Intel,,Semis,,https://intel.wd1.myworkdayjobs.com/External?q=software%20engineer,2026-05-20,Workday
+Workday,,SaaS,,https://workday.wd5.myworkdayjobs.com/Workday?q=software%20engineer,2026-05-20,Workday
+CVS,,Health,,https://cvshealth.wd1.myworkdayjobs.com/CVS_Health_Careers?q=software%20engineer,2026-05-20,Workday
+HP,,IT,,https://hp.wd5.myworkdayjobs.com/ExternalCareerSite?q=software%20engineer&Location_Country=bc33aa3152ec42d4995f4791a106ed09,2026-05-20,Workday
+HPE,,IT,,https://hpe.wd5.myworkdayjobs.com/Jobsathpe?q=software%20engineer,2026-05-20,Workday
+Salesforce,,SaaS,,https://salesforce.wd12.myworkdayjobs.com/External_Career_Site?q=software%20engineer&CF_-_REC_-_LRV_-_Job_Posting_Anchor_-_Country_from_Job_Posting_Location_Extended=bc33aa3152ec42d4995f4791a106ed09,2026-05-20,Workday
+Fidelity,,Finance,,https://wd1.myworkdaysite.com/en-US/recruiting/fmr/FidelityCareers/jobs?q=software+engineer&locationCountry=bc33aa3152ec42d4995f4791a106ed09,2026-05-20,Workday
+Visa,"Fintech ",,,https://visa.wd5.myworkdayjobs.com/Visa?q=software%20engineer&locationCountry=bc33aa3152ec42d4995f4791a106ed09,,Workday
+Accenture,Consulting,Professional Services & Specialized Finance,,https://accenture.wd103.myworkdayjobs.com/AccentureCareers?q=software%20engineer&locationCountry=bc33aa3152ec42d4995f4791a106ed09,,Workday
+Vanguard,,Finance,,https://vanguard.wd5.myworkdayjobs.com/vanguard_external?q=software%20engineer,,Workday
+Paypal,"Fintech ",,,https://paypal.wd1.myworkdayjobs.com/jobs?q=software%20engineer,,Workday
+Mastercard,"Fintech ",,,https://mastercard.wd1.myworkdayjobs.com/CorporateCareers?q=software%20engineer&jobFamilyGroup=189119ebe266100103737c3d6a6e0000,,Workday
+Bank of America,Finance,Global Banking & Investment Firms,,https://ghr.wd1.myworkdayjobs.com/Lateral-US?q=software%20engineer,,Workday
+Wells Fargo,Finance,Global Banking & Investment Firms,,https://wd1.myworkdaysite.com/recruiting/wf/WellsFargoJobs?q=software%20engineer&locationCountry=bc33aa3152ec42d4995f4791a106ed09,,Workday
+BlackRock,Finance,Asset Management & Specialized Finance,,https://blackrock.wd1.myworkdayjobs.com/BlackRock_Professional?q=software%20engineer,,Workday
+"T. Rowe Price ",Finance,Global Banking & Investment Firms,,https://troweprice.wd5.myworkdayjobs.com/TRowePrice?q=software%20engineer,,Workday
+Morgan Stanley,Finance,Global Banking & Investment Firms,,https://ms.wd5.myworkdayjobs.com/External?q=software%20engineer&Location_Country=bc33aa3152ec42d4995f4791a106ed09,,Workday
+Truist,Finance,Global Banking & Investment Firms,,https://truist.wd1.myworkdayjobs.com/Careers?q=software%20engineer,,Workday
+U.S. Bancorp,Finance,Global Banking & Investment Firms,,https://usbank.wd1.myworkdayjobs.com/US_Bank_Careers?q=software%20engineer&locationCountry=bc33aa3152ec42d4995f4791a106ed09,,Workday
+PNC Bank,Finance,Commercial & Regional Banking,,https://pnc.wd5.myworkdayjobs.com/External?q=software%20engineer,,
+State Street,Finance,Global & Investment Banking,,https://statestreet.wd1.myworkdayjobs.com/Global?q=software%20engineer&Location_Country=bc33aa3152ec42d4995f4791a106ed09
+Barclays,Finance,Global & Investment Banking,,https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays?q=software%20engineer
+Deutsche Bank,Finance,Global & Investment Banking,,https://db.wd3.myworkdayjobs.com/DBWebsite?q=software%20engineer&Country=bc33aa3152ec42d4995f4791a106ed09
+Capital One,Finance,Commercial & Regional Banking,,https://capitalone.wd12.myworkdayjobs.com/Capital_One?q=software%20engineer
+BMO Financial Group,Finance,Commercial & Regional Banking,,https://bmo.wd3.myworkdayjobs.com/External?q=software%20engineer&Country=bc33aa3152ec42d4995f4791a106ed09
+"Fifth Third Bancorp ",Finance,Commercial & Regional Banking,,https://fifththird.wd5.myworkdayjobs.com/53careers?q=software%20engineer&Location_Country=bc33aa3152ec42d4995f4791a106ed09
+KeyCorp,Finance,Commercial & Regional Banking,,https://keybank.wd5.myworkdayjobs.com/External_Career_Site?q=software%20engineer
+M&T Bank,Finance,Commercial & Regional Banking,,https://mtb.wd5.myworkdayjobs.com/MTB?q=software%20engineer&locationCountry=bc33aa3152ec42d4995f4791a106ed09
+Ameriprise Financial,Finance,Asset Management & Specialized Finance,,https://ameriprise.wd5.myworkdayjobs.com/Ameriprise?q=software%20engineer
+Northern Trust,Finance,Asset Management & Specialized Finance,,https://ntrs.wd1.myworkdayjobs.com/northerntrust?q=software%20engineer&locationCountry=bc33aa3152ec42d4995f4791a106ed09
+Raymond James,Finance,Asset Management & Specialized Finance,,https://raymondjames.wd1.myworkdayjobs.com/RaymondJamesCareers?q=software%20engineer&Country=bc33aa3152ec42d4995f4791a106ed09
+"Synchrony Financial ",Finance,Asset Management & Specialized Finance,,https://synchronyfinancial.wd5.myworkdayjobs.com/careers?q=software%20engineer
+S&P Global,Finance,Asset Management & Specialized Finance,,https://spgi.wd5.myworkdayjobs.com/SPGI_Careers?q=software%20engineer&Location_Country=bc33aa3152ec42d4995f4791a106ed09
+Deloitte,Consulting,Global Technology & Strategy Consultancies,,https://deloitteie.wd3.myworkdayjobs.com/experienced_professionals?q=software%20engineer
+Cognizant,Consulting,Global Technology & Strategy Consultancies,,https://collaborative.wd1.myworkdayjobs.com/AllOpenings?q=software%20engineer
+PwC,Consulting,Global Technology & Strategy Consultancies,,https://pwc.wd3.myworkdayjobs.com/Global_Experienced_Careers?q=software%20engineer
+Protiviti,Consulting,Specialized IT & Engineering Consultancies,,https://roberthalf.wd1.myworkdayjobs.com/ProtivitiExperiencedCareers?q=software%20engineer&Location_Country=bc33aa3152ec42d4995f4791a106ed09
+"BJ’s Wholesale Club ",Consulting,Specialized IT & Engineering Consultancies,,https://bjswholesaleclub.wd1.myworkdayjobs.com/BJsCareers?q=software%20engineer&locationCountry=bc33aa3152ec42d4995f4791a106ed09
+DXC Technology,Consulting,Specialized IT & Engineering Consultancies,,https://dxctechnology.wd1.myworkdayjobs.com/DXCJobs?q=software%20engineer&locationCountry=bc33aa3152ec42d4995f4791a106ed09
+Gartner,Consulting,Specialized IT & Engineering Consultancies,,https://gartner.wd5.myworkdayjobs.com/EXT?q=software%20engineer&locationCountry=bc33aa3152ec42d4995f4791a106ed09
+Huron,Consulting,Specialized IT & Engineering Consultancies,,https://huron.wd1.myworkdayjobs.com/huroncareers?q=software%20engineer&locationCountry=bc33aa3152ec42d4995f4791a106ed09

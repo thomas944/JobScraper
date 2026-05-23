@@ -40,3 +40,4 @@ def passes_secondary_filters(job: JobDescriptionInfo, DEGREES, MIN_YOE, MAX_YOE)
             return False
     
     return True
+
