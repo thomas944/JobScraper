@@ -1,0 +1,14 @@
+[project]
+name = "jobscraper"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "beautifulsoup4>=4.14.3",
+    "pandas>=3.0.3",
+    "psycopg2-binary>=2.9.12",
+    "selenium>=4.44.0",
+    "sqlalchemy>=2.0.50",
+    "webdriver-manager>=4.1.1",
+]

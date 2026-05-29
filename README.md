@@ -55,6 +55,19 @@ pip install -r requirements.txt
 pip list
 ```
 
+## uv Setup
+1. Install uv
+
+2. Install python
+```bash
+uv python install <version>
+```
+
+View installations
+```bash
+uv python list --only-installed
+```
+
 ## Debugger Setup
 Optional steps to set up debugger (recommended if developer)
 1. Create a folder called `.vscode` if you don't already have
